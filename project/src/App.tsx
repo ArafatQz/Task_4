@@ -1,12 +1,13 @@
 import './App.css'
-
+import { BrowserRouter } from 'react-router-dom'
+import LandingPage from './pages/landing-pages/LandingPage'
 function App() {
 
 
   return (
-    <>
-     <p>hello world</p>
-    </>
+    <BrowserRouter>
+      <LandingPage />
+    </BrowserRouter>
   )
 }
 
