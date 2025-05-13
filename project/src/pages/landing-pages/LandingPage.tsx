@@ -3,12 +3,17 @@ import { useState, useEffect } from "react";
 import EventCard from "@/components/event-card";
 import useEventStore from "@/stores/eventStore";
 import Button from "@/components/button";
+import  useAttendeeStore  from "@/stores/attendeeStore";
+
 
 const LandingPage = () => {
   const { events, loading, error, fetchEvents } = useEventStore();
   const [isClicked, setIsClicked] = useState(false);
   const [selectedEventId, setSelectedEventId] = useState<number | null>(null);
-  const [attendees, setAttendee] = useState([{name:'nasser', email:'nasser.com'}, { name: 'ahemd', email: 'ahmed.com'}]);
+  const { attendees } = useAttendeeStore();
+ 
+  console.log(attendees);
+  console.log(events);
 
   useEffect(() => {
     fetchEvents();
@@ -21,12 +26,13 @@ const LandingPage = () => {
 
   if (isClicked) {
     const selectedEvent = events.find(e => e.id === selectedEventId);
+    console.log(selectedEvent);
     return selectedEvent ? (
       <EventDetails
-        totalAttendees={attendees.length}
-        attendees={attendees.map((a, id) => ({ id: id + 1, name: a.name }))}
+        name={selectedEvent.name}
+        totalAttendees={attendees.filter(a => a.eventId === selectedEvent.id).length}
+        attendees={attendees.filter(a => a.eventId === selectedEvent.id).map((a, idx) => ({ id: idx + 1, name: a.name, eventId: a.eventId }))}
         id={selectedEvent.id}
-        title={selectedEvent.name}
         dateTime={selectedEvent.date}
         imageUrl={selectedEvent.image_url}
         location={selectedEvent.location}
@@ -35,6 +41,7 @@ const LandingPage = () => {
           setIsClicked(false);
           setSelectedEventId(null);
         }}
+        handleClick={()=>handleClick}
       />
     ) : null;
   }
@@ -55,8 +62,7 @@ const LandingPage = () => {
             dateTime={event.date}
             location={event.location}
             imageUrl={event.image_url}
-            totalAttendees={attendees.length}
-            
+            totalAttendees={attendees.filter(a => a.eventId === event.id).length}
           />
         ))}
       </div>

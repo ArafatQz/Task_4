@@ -8,6 +8,9 @@ interface Event {
   location: string;
   description: string;
   image_url: string;
+  total_tickets: number;
+  available_tickets: number;
+  totalAttendees: number;
 }
 
 interface EventStore {

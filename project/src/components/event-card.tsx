@@ -19,7 +19,16 @@ export default function EventCard({ id, name, dateTime, location, totalAttendees
       />
       <div className="p-6 flex flex-col flex-grow">
         <h2 className="text-xl font-medium mb-2 card-h2">{name}</h2>
-        <p className="text-base text-gray-600 mb-2 card-date">{dateTime}</p>
+        <p className="text-sm italic text-gray-600 mb-2 card-date">
+          {new Date(dateTime).toLocaleDateString('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+          })}
+        </p>
         <p className="text-base text-gray-600 mb-2 card-location">{location}</p>
         <p className="text-[14px] text-gray-600 mb-2 card-attendee">
           Attendees: {totalAttendees}

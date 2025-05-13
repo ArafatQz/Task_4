@@ -1,13 +1,15 @@
-
-
+import BuyTicketForm from "./regesterForm";
+import { useState } from "react";
+;
 interface Attendee {
   id: number;
   name: string;
+  eventId: number;
 }
 
 interface EventDetailsProps {
   id: number;
-  title: string;
+  name: string;
   dateTime: string;
   location: string;
   description: string;
@@ -15,11 +17,12 @@ interface EventDetailsProps {
   totalAttendees: number;
   attendees: Attendee[];
   onClick: () => void;
+  handleClick: () => void;
 }
 
 const EventDetails = ({
   id,
-  title,
+  name,
   dateTime,
   location,
   description,
@@ -28,9 +31,21 @@ const EventDetails = ({
   totalAttendees,
   attendees,
   
+
   
 }: EventDetailsProps) => {
+  
 
+  const [isClicked, setIsClicked] = useState(false);
+  const handleClick2 = (x: boolean) => {
+    setIsClicked(x);
+  };
+
+if(isClicked){
+  return(
+    <BuyTicketForm eventId={id} onClick={()=>handleClick2(false)} />
+  )
+}  
 
   return (
     <div className="bg-gray-100 text-gray-800 min-h-screen p-6">
@@ -52,10 +67,10 @@ const EventDetails = ({
         </button>
 
         <div className="bg-white rounded-lg shadow p-6">
-          <h1 className="text-3xl font-bold mb-4">{title}</h1>
+          <h1 className="text-3xl font-bold mb-4">{name}</h1>
           <img
             src={imageUrl}
-            alt={title}
+            alt={name}
             className="w-full h-64 object-cover rounded-lg mb-6"
           />
 
@@ -81,9 +96,9 @@ const EventDetails = ({
               Total Attendees: <span className="font-semibold">{totalAttendees}</span>
             </p>
             <button
-              onClick={() => {
-                // handle registration action
-              }}
+              onClick={() => 
+               handleClick2(true)
+              }
               className="mt-4 sm:mt-0 inline-block px-6 py-3 bg-indigo-600 text-white rounded-md font-semibold hover:bg-indigo-700"
             >
               Register Now
@@ -93,7 +108,7 @@ const EventDetails = ({
           <div>
             <h2 className="text-xl font-semibold mb-4">Attendees</h2>
             <ul className="space-y-2">
-              {attendees.map(({ id, name }) => (
+              {attendees.filter(a => a.eventId === id).map(({ id, name }) => (
                 <li
                   key={id}
                   className="bg-gray-50 p-4 rounded-lg shadow-sm"
