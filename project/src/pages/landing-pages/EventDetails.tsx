@@ -1,5 +1,6 @@
-import BuyTicketForm from "./regesterForm";
-import { useState } from "react";
+import BuyTicketForm from "./registerForm";
+import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 ;
 interface Attendee {
   id: number;
@@ -7,7 +8,7 @@ interface Attendee {
   eventId: number;
 }
 
-interface EventDetailsProps {
+export interface EventDetailsProps {
   id: number;
   name: string;
   dateTime: string;
@@ -17,7 +18,7 @@ interface EventDetailsProps {
   totalAttendees: number;
   attendees: Attendee[];
   onClick: () => void;
-  handleClick: () => void;
+  handleClick: (eventId: number) => void;
 }
 
 const EventDetails = ({
@@ -30,10 +31,16 @@ const EventDetails = ({
   onClick,
   totalAttendees,
   attendees,
-  
-
-  
 }: EventDetailsProps) => {
+  const { data: attendeesData } = useQuery({
+    queryKey: ['attendees'],
+    queryFn: async () => {
+      const response = await fetch('/api/attendees');
+      return response.json();
+    },
+    gcTime: 5 * 60 * 1000, // 5 minutes cache time
+    staleTime: 60 * 1000 // 1 minute stale time
+  });
   
 
   const [isClicked, setIsClicked] = useState(false);

@@ -1,68 +1,76 @@
-import EventDetails from "./EventDetails";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useQuery } from '@tanstack/react-query';
 import EventCard from "@/components/event-card";
-import useEventStore from "@/stores/eventStore";
+import useEventStore, { type Event } from "@/stores/eventStore";
 import Button from "@/components/button";
-import  useAttendeeStore  from "@/stores/attendeeStore";
-
+import useAttendeeStore, { type Attendee } from "@/stores/attendeeStore";
+import EventDetails from "./EventDetails";
 
 const LandingPage = () => {
-  const { events, loading, error, fetchEvents } = useEventStore();
+  const { fetchEvents } = useEventStore();
+  const { data: events, isLoading, isError, error } = useQuery<Event[]>({
+    queryKey: ['events'],
+    queryFn: () => fetchEvents()
+  });
+
   const [isClicked, setIsClicked] = useState(false);
   const [selectedEventId, setSelectedEventId] = useState<number | null>(null);
   const { attendees } = useAttendeeStore();
- 
-  console.log(attendees);
-  console.log(events);
-
-  useEffect(() => {
-    fetchEvents();
-  }, []);
 
   const handleClick = (eventId: number) => {
     setSelectedEventId(eventId);
     setIsClicked(true);
   };
 
-  if (isClicked) {
+  if (isClicked && selectedEventId != null && events) {
     const selectedEvent = events.find(e => e.id === selectedEventId);
-    console.log(selectedEvent);
-    return selectedEvent ? (
-      <EventDetails
-        name={selectedEvent.name}
-        totalAttendees={attendees.filter(a => a.eventId === selectedEvent.id).length}
-        attendees={attendees.filter(a => a.eventId === selectedEvent.id).map((a, idx) => ({ id: idx + 1, name: a.name, eventId: a.eventId }))}
-        id={selectedEvent.id}
-        dateTime={selectedEvent.date}
-        imageUrl={selectedEvent.image_url}
-        location={selectedEvent.location}
-        description={selectedEvent.description}
-        onClick={() => {
-          setIsClicked(false);
-          setSelectedEventId(null);
-        }}
-        handleClick={()=>handleClick}
-      />
-    ) : null;
+    const attendeesForThisEvent = attendees
+      .filter((a: Attendee) => a.eventId === selectedEventId)
+      .map((a: Attendee, idx: number) => ({
+        id: idx + 1,
+        name: a.name,
+        eventId: a.eventId
+      }));
+
+    if (selectedEvent) {
+      return (
+        <EventDetails
+          id={selectedEvent.id}
+          name={selectedEvent.name}
+          dateTime={selectedEvent.date}
+          imageUrl={selectedEvent.image_url}
+          location={selectedEvent.location}
+          description={selectedEvent.description}
+          totalAttendees={attendeesForThisEvent.length}
+          attendees={attendeesForThisEvent}
+          onClick={() => {
+            setIsClicked(false);
+            setSelectedEventId(null);
+          }}
+          handleClick={() => {}} // Required by EventDetailsProps
+        />
+      );
+    }
   }
 
-  if (loading) return <div className="text-center mt-10">Loading events...</div>;
-  if (error) return <div className="text-center mt-10 text-red-500">Error: {error}</div>;
+  if (isLoading) return <div className="text-center mt-10">Loading events…</div>;
+  if (isError)  return <div className="text-center mt-10 text-red-500">Error: {error.message}</div>;
 
   return (
     <>
-        <Button />
+      <Button />
       <div className="flex justify-center gap-5 flex-wrap mt-10">
-        {events.map(event => (
+        {(events || []).map((event: Event) => (
           <EventCard
-            name={event.name}
             key={event.id}
-            onClick={() => handleClick(event.id)}
             id={event.id}
+            name={event.name}
             dateTime={event.date}
             location={event.location}
             imageUrl={event.image_url}
-            totalAttendees={attendees.filter(a => a.eventId === event.id).length}
+            description={event.description}
+            totalAttendees={attendees.filter((a: Attendee) => a.eventId === event.id).length}
+            onClick={() => handleClick(event.id)}
           />
         ))}
       </div>
@@ -70,4 +78,4 @@ const LandingPage = () => {
   );
 };
 
-export default LandingPage
+export default LandingPage;

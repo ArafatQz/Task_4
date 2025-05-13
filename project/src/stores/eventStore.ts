@@ -1,7 +1,7 @@
 import {create} from 'zustand';
 import axios from 'axios';
 
-interface Event {
+export interface Event {
   id: number;
   name: string;
   date: string;
@@ -17,20 +17,24 @@ interface EventStore {
   events: Event[];
   loading: boolean;
   error: string | null;
-  fetchEvents: () => void;
+  fetchEvents: () => Promise<Event[]>;
 }
 
 const useEventStore = create<EventStore>((set) => ({
   events: [],
   loading: false,
   error: null,
-  fetchEvents: async () => {
+  fetchEvents: async (): Promise<Event[]> => {
     set({ loading: true, error: null });
     try {
-      const response = await axios.get('http://localhost:3000/events');
-      set({ events: response.data, loading: false });
+      const response = await axios.get<Event[]>('http://localhost:3000/events');
+      const events = response.data || [];
+      set({ events, loading: false });
+      return events;
     } catch (error) {
-      set({ error: error instanceof Error ? error.message : 'An error occurred', loading: false });
+      const errorMessage = error instanceof Error ? error.message : 'An error occurred';
+      set({ error: errorMessage, loading: false });
+      return [];
     }
   },
 }));

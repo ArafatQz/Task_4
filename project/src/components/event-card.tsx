@@ -5,10 +5,19 @@ interface EventCardProps {
   location: string;
   totalAttendees: number;
   imageUrl: string;
+  description: string;
   onClick: () => void;
 }
 
-export default function EventCard({ id, name, dateTime, location, totalAttendees, imageUrl, onClick }: EventCardProps) {
+export default function EventCard({ 
+  name, 
+  dateTime, 
+  location, 
+  totalAttendees, 
+  imageUrl, 
+  description,
+  onClick 
+}: EventCardProps) {
   return (
     
     <div className="bg-white rounded-sm shadow-lg overflow-hidden flex flex-col w-80">
@@ -30,6 +39,9 @@ export default function EventCard({ id, name, dateTime, location, totalAttendees
           })}
         </p>
         <p className="text-base text-gray-600 mb-2 card-location">{location}</p>
+        <p className="text-sm text-gray-500 mb-3 line-clamp-2">
+          {description}
+        </p>
         <p className="text-[14px] text-gray-600 mb-2 card-attendee">
           Attendees: {totalAttendees}
         </p>

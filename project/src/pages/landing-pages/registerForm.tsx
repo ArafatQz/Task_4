@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 import useAttendeeStore from '@/stores/attendeeStore';
 
 
@@ -7,7 +9,14 @@ import useAttendeeStore from '@/stores/attendeeStore';
 
 export default function BuyTicketForm({onClick, eventId}: {onClick: () => void, eventId: number}) {
 
-const { register, handleSubmit } = useForm();
+const schema = z.object({
+  name: z.string().min(1, 'Name is required').regex(/^[A-Za-z]+$/, 'Name must contain only alphabetic characters'),
+  email: z.string().email('Invalid email address'),
+});
+
+const { register, handleSubmit, formState: { errors } } = useForm({
+  resolver: zodResolver(schema)
+});
 const [tickets, setTickets] = useState({name: '', quantity: 1});
 const { addAttendee, attendees } = useAttendeeStore();
 
@@ -57,6 +66,7 @@ const { addAttendee, attendees } = useAttendeeStore();
               placeholder="Your Name"
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
             />
+            {errors.name && <span className="text-red-500 text-sm">{errors.name.message}</span>}
           </div>
 
           {/* Email */}
@@ -74,6 +84,7 @@ const { addAttendee, attendees } = useAttendeeStore();
               placeholder="you@example.com"
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
             />
+            {errors.email && <span className="text-red-500 text-sm">{errors.email.message}</span>}
           </div>
 
           {/* Tickets selector */}
