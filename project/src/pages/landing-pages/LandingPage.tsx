@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useQuery } from '@tanstack/react-query';
 import EventCard from "@/components/event-card";
+import SortDropdown from "@/components/SortDropdown";
 import useEventStore, { type Event } from "@/stores/eventStore";
 import Button from "@/components/button";
 import useAttendeeStore, { type Attendee } from "@/stores/attendeeStore";
@@ -15,15 +16,20 @@ const LandingPage = () => {
 
   const [isClicked, setIsClicked] = useState(false);
   const [selectedEventId, setSelectedEventId] = useState<number | null>(null);
+  const [sortBy, setSortBy] = useState<string>('date-asc');
+
   const { attendees } = useAttendeeStore();
 
   const handleClick = (eventId: number) => {
+    console.log('Clicked event id:', eventId);
     setSelectedEventId(eventId);
     setIsClicked(true);
   };
 
+  let eventDetailsJSX = null;
   if (isClicked && selectedEventId != null && events) {
     const selectedEvent = events.find(e => e.id === selectedEventId);
+    console.log('Selected event:', selectedEvent);
     const attendeesForThisEvent = attendees
       .filter((a: Attendee) => a.eventId === selectedEventId)
       .map((a: Attendee, idx: number) => ({
@@ -33,7 +39,7 @@ const LandingPage = () => {
       }));
 
     if (selectedEvent) {
-      return (
+      eventDetailsJSX = (
         <EventDetails
           id={selectedEvent.id}
           name={selectedEvent.name}
@@ -42,6 +48,7 @@ const LandingPage = () => {
           location={selectedEvent.location}
           description={selectedEvent.description}
           totalAttendees={attendeesForThisEvent.length}
+          ticketsAvailable={selectedEvent.tickets_available}
           attendees={attendeesForThisEvent}
           onClick={() => {
             setIsClicked(false);
@@ -53,27 +60,71 @@ const LandingPage = () => {
     }
   }
 
-  if (isLoading) return <div className="text-center mt-10">Loading events…</div>;
-  if (isError)  return <div className="text-center mt-10 text-red-500">Error: {error.message}</div>;
+  const sortedEvents = useMemo(() => {
+    if (!events) return [];
+    return [...events].sort((a, b) => {
+      switch (sortBy) {
+        case 'date-asc':
+          return new Date(a.date).getTime() - new Date(b.date).getTime();
+        case 'date-desc':
+          return new Date(b.date).getTime() - new Date(a.date).getTime();
+        case 'attendees-asc':
+          return attendees.filter(at => at.eventId === a.id).length - attendees.filter(at => at.eventId === b.id).length;
+        case 'attendees-desc':
+          return attendees.filter(at => at.eventId === b.id).length - attendees.filter(at => at.eventId === a.id).length;
+        case 'name-asc':
+          return a.name.localeCompare(b.name);
+        case 'name-desc':
+          return b.name.localeCompare(a.name);
+        default:
+          return 0;
+      }
+    });
+  }, [events, sortBy, attendees]);
 
   return (
     <>
-      <Button />
-      <div className="flex justify-center gap-5 flex-wrap mt-10">
-        {(events || []).map((event: Event) => (
-          <EventCard
-            key={event.id}
-            id={event.id}
-            name={event.name}
-            dateTime={event.date}
-            location={event.location}
-            imageUrl={event.image_url}
-            description={event.description}
-            totalAttendees={attendees.filter((a: Attendee) => a.eventId === event.id).length}
-            onClick={() => handleClick(event.id)}
-          />
-        ))}
-      </div>
+      {isLoading ? (
+        <div className="text-center mt-10">Loading events…</div>
+      ) : isError ? (
+        <div className="text-center mt-10 text-red-500">Error: {error.message}</div>
+      ) : (
+        eventDetailsJSX ? (
+          eventDetailsJSX
+        ) : (
+          <>
+            <div className="w-full px-10 mt-8 mb-6 flex items-center">
+              <div className="w-1/3"></div>
+              <div className="w-1/3 flex justify-center">
+                <h1 className="text-5xl font-extrabold tracking-tight bg-gradient-to-r from-purple-600 via-blue-500 to-indigo-600 bg-clip-text text-transparent">
+                  Event Horizon
+                </h1>
+              </div>
+              <div className="w-1/3 flex justify-end">
+                <Button/>
+              </div>
+            </div>
+            <div className="px-10 mt-6 flex justify-end">
+              <SortDropdown sortBy={sortBy} setSortBy={setSortBy} />
+            </div>
+            <div className="flex justify-center gap-5 flex-wrap mt-4 px-10">
+              {sortedEvents.map((event: Event) => (
+                <EventCard
+                  key={event.id}
+                  id={event.id}
+                  name={event.name}
+                  dateTime={event.date}
+                  location={event.location}
+                  totalAttendees={attendees.filter(a => a.eventId === event.id).length}
+                  imageUrl={event.image_url}
+                  description={event.description}
+                  onClick={() => handleClick(event.id)}
+                />
+              ))}
+            </div>
+          </>
+        )
+      )}
     </>
   );
 };

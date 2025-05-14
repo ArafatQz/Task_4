@@ -9,7 +9,7 @@ export interface Event {
   description: string;
   image_url: string;
   total_tickets: number;
-  available_tickets: number;
+  tickets_available: number;
   totalAttendees: number;
 }
 
