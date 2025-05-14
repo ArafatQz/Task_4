@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import useEventStore from '@/stores/eventStore';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import useEventStore from '@/stores/eventStore';
 import useAttendeeStore from '@/stores/attendeeStore';
 
 interface BuyTicketFormProps {

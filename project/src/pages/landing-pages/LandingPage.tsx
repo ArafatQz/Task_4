@@ -93,7 +93,8 @@ const LandingPage = () => {
         ) : (
           <>
             <div className="w-full px-10 mt-8 mb-6 flex items-center">
-              <div className="w-1/3"></div>
+              <div className="w-1/3">
+              </div>
               <div className="w-1/3 flex justify-center">
                 <h1 className="text-5xl font-extrabold tracking-tight bg-gradient-to-r from-purple-600 via-blue-500 to-indigo-600 bg-clip-text text-transparent">
                   Event Horizon

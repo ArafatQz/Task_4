@@ -1,7 +1,11 @@
+import { useNavigate } from 'react-router-dom';
+
 const Button = () => {
+  const navigate = useNavigate();
   return (
     <button
       className="mb-6 px-4 py-1.5 text-sm rounded-lg bg-gradient-to-r from-indigo-500 to-blue-600 text-white font-semibold shadow hover:from-indigo-600 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-1 transition-all duration-200"
+      onClick={() => navigate('/login')}
     >
       <svg
         className="w-4 h-4 mr-1.5 inline-block align-middle"
