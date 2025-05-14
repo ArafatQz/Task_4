@@ -14,7 +14,7 @@ const LandingPage = () => {
     queryFn: () => fetchEvents()
   });
 
-  const [isClicked, setIsClicked] = useState(false);
+  const [isClicked, setIsClicked] = useState<boolean>(false);
   const [selectedEventId, setSelectedEventId] = useState<number | null>(null);
   const [sortBy, setSortBy] = useState<string>('date-asc');
 
@@ -48,7 +48,6 @@ const LandingPage = () => {
           location={selectedEvent.location}
           description={selectedEvent.description}
           totalAttendees={attendeesForThisEvent.length}
-          ticketsAvailable={selectedEvent.tickets_available}
           attendees={attendeesForThisEvent}
           onClick={() => {
             setIsClicked(false);
@@ -117,7 +116,7 @@ const LandingPage = () => {
                   location={event.location}
                   totalAttendees={attendees.filter(a => a.eventId === event.id).length}
                   imageUrl={event.image_url}
-                  description={event.description}
+
                   onClick={() => handleClick(event.id)}
                 />
               ))}

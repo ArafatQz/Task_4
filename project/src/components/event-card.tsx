@@ -1,3 +1,5 @@
+import useEventStore from '@/stores/eventStore';
+
 interface EventCardProps {
   id: number;
   name: string;
@@ -5,21 +7,24 @@ interface EventCardProps {
   location: string;
   totalAttendees: number;
   imageUrl: string;
-  description: string;
   onClick: () => void;
 }
 
 export default function EventCard({ 
+  id,
   name, 
   dateTime, 
   location, 
   totalAttendees, 
-  imageUrl, 
-  description,
+  imageUrl,
   onClick 
 }: EventCardProps) {
+  const ticketsAvailable = useEventStore(state => {
+    const event = state.events.find(e => e.id === id);
+    return event ? event.tickets_available : 0;
+  });
+
   return (
-    
     <div className="bg-white rounded-sm shadow-lg overflow-hidden flex flex-col w-80">
       <img
         src={imageUrl}
@@ -39,13 +44,12 @@ export default function EventCard({
           })}
         </p>
         <p className="text-base text-gray-600 mb-2 card-location">{location}</p>
-        <p className="text-sm text-gray-500 mb-3 line-clamp-2">
-          {description}
-        </p>
         <p className="text-[14px] text-gray-600 mb-2 card-attendee">
           Attendees: {totalAttendees}
         </p>
-
+        <p className="text-[14px] text-gray-600 mb-2 card-tickets">
+          Tickets Available: {ticketsAvailable}
+        </p>
       </div>
       <button
         onClick={onClick}

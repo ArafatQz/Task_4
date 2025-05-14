@@ -2,11 +2,13 @@ import BuyTicketForm from "./registerForm";
 import { useState } from 'react';
 
 
-interface Attendee {
+export interface Attendee {
   id: number;
   name: string;
   eventId: number;
 }
+
+import useEventStore from '@/stores/eventStore';
 
 export interface EventDetailsProps {
   id: number;
@@ -16,7 +18,6 @@ export interface EventDetailsProps {
   description: string;
   imageUrl: string;
   totalAttendees: number;
-  ticketsAvailable: number;
   attendees: Attendee[];
   onClick: () => void;
   handleClick: (eventId: number) => void;
@@ -31,9 +32,12 @@ const EventDetails = ({
   imageUrl,
   onClick,
   totalAttendees,
-  ticketsAvailable,
   attendees,
 }: EventDetailsProps) => {
+  const ticketsAvailable = useEventStore(state => {
+    const event = state.events.find(e => e.id === id);
+    return event ? event.tickets_available : 0;
+  });
   const [isClicked, setIsClicked] = useState(false);
 
   return (

@@ -13,11 +13,12 @@ export interface Event {
   totalAttendees: number;
 }
 
-interface EventStore {
+export interface EventStore {
   events: Event[];
   loading: boolean;
   error: string | null;
   fetchEvents: () => Promise<Event[]>;
+  decrementTickets: (eventId: number, quantity: number) => void;
 }
 
 const useEventStore = create<EventStore>((set) => ({
@@ -37,6 +38,14 @@ const useEventStore = create<EventStore>((set) => ({
       return [];
     }
   },
+  decrementTickets: (eventId: number, quantity: number) =>
+    set((state) => ({
+      events: state.events.map(event =>
+        event.id === eventId
+          ? { ...event, tickets_available: Math.max(0, event.tickets_available - quantity) }
+          : event
+      ),
+    })),
 }));
 
 export default useEventStore;

@@ -1,30 +1,37 @@
 import { useState } from 'react';
+import useEventStore from '@/stores/eventStore';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import useAttendeeStore from '@/stores/attendeeStore';
 
+interface BuyTicketFormProps {
+  onClick: () => void;
+  eventId: number;
+}
 
+export default function BuyTicketForm({ onClick, eventId }: BuyTicketFormProps) {
+  const { decrementTickets, events } = useEventStore();
+  const event = events.find(e => e.id === eventId);
+  const availableTickets = event ? event.tickets_available : 0;
 
+  const schema = z.object({
+    name: z.string().min(1, 'Name is required').regex(/^[A-Za-z]+$/, 'Name must contain only alphabetic characters'),
+    email: z.string().email('Invalid email address'),
+  });
 
-export default function BuyTicketForm({onClick, eventId}: {onClick: () => void, eventId: number}) {
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    resolver: zodResolver(schema)
+  });
+  const [tickets, setTickets] = useState<{ name: string; quantity: number }>({ name: '', quantity: 1 });
+  const { addAttendee } = useAttendeeStore();
 
-const schema = z.object({
-  name: z.string().min(1, 'Name is required').regex(/^[A-Za-z]+$/, 'Name must contain only alphabetic characters'),
-  email: z.string().email('Invalid email address'),
-});
+  const handleIncrement = () => setTickets(t => ({
+    ...t,
+    quantity: t.quantity < availableTickets ? t.quantity + 1 : t.quantity
+  }));
 
-const { register, handleSubmit, formState: { errors } } = useForm({
-  resolver: zodResolver(schema)
-});
-const [tickets, setTickets] = useState({name: '', quantity: 1});
-const { addAttendee, attendees } = useAttendeeStore();
-
-  console.log(attendees);
-  const handleIncrement = () => setTickets(t => ({...t, quantity: t.quantity + 1}));
-  
   const handleDecrement = () => setTickets(t => ({...t, quantity: t.quantity > 1 ? t.quantity - 1 : t.quantity}));
-
 
   return (
     <div className="bg-gray-100 flex items-center justify-center min-h-screen p-4">
@@ -47,10 +54,13 @@ const { addAttendee, attendees } = useAttendeeStore();
           </svg>
           Back to Event
         </button>
+
         <form onSubmit={handleSubmit((data) => {
-    addAttendee({ id: Date.now(), name: data.name, email: data.email, eventId: eventId, ticketQuantity: tickets.quantity, date: new Date().toLocaleDateString() });
-    onClick();
-  })}>
+          decrementTickets(eventId, tickets.quantity);
+          addAttendee({ id: Date.now(), name: data.name, email: data.email, eventId: eventId, ticketQuantity: tickets.quantity, date: new Date().toLocaleDateString() });
+          onClick();
+        })}>
+
           {/* Name */}
           <div className="mb-4">
             <label
@@ -103,6 +113,8 @@ const { addAttendee, attendees } = useAttendeeStore();
               <input
                 type="number"
                 value={tickets.quantity}
+                min={1}
+                max={availableTickets}
                 readOnly
                 className="w-16 text-center px-2 py-1 border rounded-lg focus:outline-none"
               />
@@ -110,6 +122,7 @@ const { addAttendee, attendees } = useAttendeeStore();
                 type="button"
                 onClick={handleIncrement}
                 className="w-8 h-8 flex items-center justify-center border rounded-full hover:bg-gray-100"
+                disabled={tickets.quantity >= availableTickets}
               >
                 +
               </button>

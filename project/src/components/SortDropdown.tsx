@@ -1,6 +1,4 @@
-import React from "react";
-
-interface SortDropdownProps {
+export interface SortDropdownProps {
   sortBy: string;
   setSortBy: (value: string) => void;
 }
