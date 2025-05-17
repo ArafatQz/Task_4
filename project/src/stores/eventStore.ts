@@ -1,5 +1,5 @@
-import {create} from 'zustand';
-import axios from 'axios';
+import { create } from 'zustand';
+import { fetchEventsApi } from '@/api/eventsApi';
 
 export interface Event {
   id: number;
@@ -11,10 +11,13 @@ export interface Event {
   total_tickets: number;
   tickets_available: number;
   totalAttendees: number;
+  
 }
 
 export interface EventStore {
   events: Event[];
+  upcomingEvents: Event[];
+  pastEvents: Event[];
   loading: boolean;
   error: string | null;
   fetchEvents: () => Promise<Event[]>;
@@ -23,14 +26,17 @@ export interface EventStore {
 
 const useEventStore = create<EventStore>((set) => ({
   events: [],
+  upcomingEvents: [],
+  pastEvents: [],
   loading: false,
   error: null,
   fetchEvents: async (): Promise<Event[]> => {
     set({ loading: true, error: null });
     try {
-      const response = await axios.get<Event[]>('http://localhost:3000/events');
-      const events = response.data || [];
-      set({ events, loading: false });
+      const events = await fetchEventsApi();
+      const upcomingEvents = events.filter(event => new Date(event.date) > new Date());
+      const pastEvents = events.filter(event => new Date(event.date) <= new Date());
+      set({ events, upcomingEvents, pastEvents, loading: false });
       return events;
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'An error occurred';

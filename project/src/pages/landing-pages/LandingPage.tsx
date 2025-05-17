@@ -5,7 +5,7 @@ import SortDropdown from "@/components/SortDropdown";
 import useEventStore, { type Event } from "@/stores/eventStore";
 import Button from "@/components/button";
 import useAttendeeStore, { type Attendee } from "@/stores/attendeeStore";
-import EventDetails from "./EventDetails";
+import EventDetails from "@/components/EventDetails";
 
 const LandingPage = () => {
   const { fetchEvents } = useEventStore();
@@ -53,7 +53,10 @@ const LandingPage = () => {
             setIsClicked(false);
             setSelectedEventId(null);
           }}
-          handleClick={() => {}} // Required by EventDetailsProps
+          handleClick={() => {
+            setIsClicked(false);
+            setSelectedEventId(null);
+          }}
         />
       );
     }

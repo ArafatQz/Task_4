@@ -34,7 +34,7 @@ export default function BuyTicketForm({ onClick, eventId }: BuyTicketFormProps) 
   const handleDecrement = () => setTickets(t => ({...t, quantity: t.quantity > 1 ? t.quantity - 1 : t.quantity}));
 
   return (
-    <div className="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+    <div className="bg-gray-100 flex items-center justify-center h-150 ">
       <div className="bg-white rounded-xl shadow-md p-6 w-full max-w-md">
         <h2 className="text-2xl font-semibold mb-6 text-center">
           Buy Ticket

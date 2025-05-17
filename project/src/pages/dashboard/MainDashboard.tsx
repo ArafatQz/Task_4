@@ -1,10 +1,12 @@
 
 import useEventStore from '@/stores/eventStore';
 import useAttendeeStore from '@/stores/attendeeStore';
+import { useNavigate } from 'react-router-dom';
 
 export default function Dashboard() {
   const events = useEventStore((state) => state.events);
   const attendees = useAttendeeStore((state) => state.attendees);
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
@@ -19,6 +21,10 @@ export default function Dashboard() {
           {/* Total Events Card */}
           <div
             className="block bg-white rounded-2xl shadow-lg border border-indigo-100 p-8 transform transition hover:scale-105 cursor-pointer"
+            onClick={() => navigate('/dashboard/cards')}
+            role="button"
+            tabIndex={0}
+            onKeyPress={e => { if (e.key === 'Enter') navigate('/dashboard/cards'); }}
           >
             <h2 className="text-xl font-semibold text-gray-700 mb-4">Total Events</h2>
             <div className="text-5xl font-extrabold bg-gradient-to-r from-purple-600 via-blue-500 to-indigo-600 bg-clip-text text-transparent">

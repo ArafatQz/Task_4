@@ -12,7 +12,7 @@
     {
       "id": "2",
       "name": "Modern Art Exhibition",
-      "date": "2025-06-15T10:00:00Z",
+      "date": "2025-01-15T10:00:00Z",
       "location": "Downtown Art Gallery",
       "description": "Showcasing contemporary works from emerging artists.",
       "image_url": "https://picsum.photos/seed/2/600/400",
@@ -21,7 +21,7 @@
     {
       "id": "3",
       "name": "Tech Innovators Conference",
-      "date": "2025-07-02T09:00:00Z",
+      "date": "2025-02-02T09:00:00Z",
       "location": "Convention Center Hall B",
       "description": "Keynotes and workshops on the latest in AI and robotics.",
       "image_url": "https://picsum.photos/seed/3/600/400",

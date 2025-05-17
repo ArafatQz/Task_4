@@ -14,7 +14,7 @@ type LoginFormInputs = z.infer<typeof loginSchema>;
 
 export default function LogIn() {
   const login = useUserStore((state) => state.login);
-  const [success, setSuccess] = useState(false);
+
   const [loginError, setLoginError] = useState<string | null>(null);
   const navigate = useNavigate();
 
@@ -30,12 +30,10 @@ export default function LogIn() {
   const onSubmit = (data: LoginFormInputs) => {
     const ok = login(data.email, data.password);
     if (ok) {
-      setSuccess(true);
       setLoginError(null);
       reset();
       navigate('/dashboard');
     } else {
-      setSuccess(false);
       setLoginError('Invalid email or password.');
     }
   };
