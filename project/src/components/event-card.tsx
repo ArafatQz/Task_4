@@ -1,4 +1,7 @@
 import useEventStore from '@/stores/eventStore';
+import { useMutation } from '@tanstack/react-query';
+import { deleteEventApi } from '@/api/eventsApi';
+import useUserStore from '@/stores/userStore';
 
 interface EventCardProps {
   id: number;
@@ -23,9 +26,23 @@ export default function EventCard({
     const event = state.events.find(e => e.id === id);
     return event ? event.tickets_available : 0;
   });
+  const fetchEvents = useEventStore(state => state.fetchEvents);
+  const deleteMutation = useMutation({
+    mutationFn: (id: number) => deleteEventApi(id),
+    onSuccess: () => {
+      fetchEvents();
+    },
+  });
+  const isAuthenticated = useUserStore(state => state.isAuthenticated);
+
+  const handleDelete = () => {
+    if (window.confirm('Are you sure you want to delete this event?')) {
+      deleteMutation.mutate(id);
+    }
+  };
 
   return (
-    <div className="bg-white rounded-sm shadow-lg overflow-hidden flex flex-col w-80">
+    <div className="bg-white rounded-sm shadow-lg overflow-visible flex flex-col w-80 relative">
       <img
         src={imageUrl}
         alt={name}
@@ -57,6 +74,17 @@ export default function EventCard({
       >
         View Details
       </button>
+      {isAuthenticated && (
+        <button
+          onClick={handleDelete}
+          className="absolute -top-5 -right-5 w-8 h-8 flex items-center justify-center bg-red-500 text-white rounded-full text-lg font-bold shadow hover:bg-red-700 transition cursor-pointer z-[99999] border-2 border-white ring-2 ring-red-300"
+          disabled={deleteMutation.status === 'pending'}
+          title="Delete event"
+          style={{ lineHeight: 1 }}
+        >
+          {deleteMutation.status === 'pending' ? '…' : '×'}
+        </button>
+      )}
     </div>
   );
 }

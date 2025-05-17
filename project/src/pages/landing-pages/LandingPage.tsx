@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useQuery } from '@tanstack/react-query';
 import EventCard from "@/components/event-card";
 import SortDropdown from "@/components/SortDropdown";
@@ -25,6 +25,17 @@ const LandingPage = () => {
     setSelectedEventId(eventId);
     setIsClicked(true);
   };
+
+  // Reset event details view if the selected event was deleted
+  useEffect(() => {
+    if (isClicked && selectedEventId != null && events) {
+      const stillExists = events.some(e => e.id === selectedEventId);
+      if (!stillExists) {
+        setIsClicked(false);
+        setSelectedEventId(null);
+      }
+    }
+  }, [events, isClicked, selectedEventId]);
 
   let eventDetailsJSX = null;
   if (isClicked && selectedEventId != null && events) {

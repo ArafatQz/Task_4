@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import useEventStore from '@/stores/eventStore';
-import axios from 'axios';
+import { createEventApi } from '@/api/eventsApi';
 
 const initialForm = {
   name: '',
@@ -23,10 +23,7 @@ export default function CreateEvent() {
   // React Query mutation for creating event
   const mutation = useMutation({
     mutationFn: async (data: typeof form) => {
-      // Generate a random string id (json-server will allow string or number)
-      const eventToSend = { ...data, id: Date.now().toString() };
-      const response = await axios.post('http://localhost:3000/events', eventToSend);
-      return response.data;
+      return await createEventApi(data);
     },
     onSuccess: async () => {
       setSuccess(true);
@@ -111,7 +108,7 @@ export default function CreateEvent() {
                 if (files && files.length > 0) {
                   setForm(prev => ({
                     ...prev,
-                    image_url: `${files[0].name}`
+                    image_url: `./src/imags/${files[0].name}`
                   }));
                 }
               }}

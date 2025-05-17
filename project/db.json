@@ -145,15 +145,6 @@
       "tickets_available": 100
     },
     {
-      "id": "17",
-      "name": "Spring Flower Show",
-      "date": "2026-03-20T09:00:00Z",
-      "location": "Botanical Gardens",
-      "description": "Floral displays, gardening workshops, and plant sales.",
-      "image_url": "https://picsum.photos/seed/17/600/400",
-      "tickets_available": 100
-    },
-    {
       "id": "18",
       "name": "International Food Truck Rally",
       "date": "2025-07-22T11:00:00Z",
@@ -235,15 +226,6 @@
       "tickets_available": 100
     },
     {
-      "id": "27",
-      "name": "St. Patrick’s Day Parade",
-      "date": "2026-03-17T11:00:00Z",
-      "location": "Main Street",
-      "description": "Floats, bagpipes, and green-themed fun for all ages.",
-      "image_url": "https://picsum.photos/seed/27/600/400",
-      "tickets_available": 100
-    },
-    {
       "id": "28",
       "name": "Cherry Blossom Festival",
       "date": "1111-10-10T10:10",
@@ -307,24 +289,6 @@
       "tickets_available": 100
     },
     {
-      "id": "35",
-      "name": "Carnival Parade",
-      "date": "2026-02-28T14:00:00Z",
-      "location": "Beachfront Boulevard",
-      "description": "Colorful floats, dancers, and live music.",
-      "image_url": "https://picsum.photos/seed/35/600/400",
-      "tickets_available": 100
-    },
-    {
-      "id": "36",
-      "name": "Spring Outdoor Yoga Retreat",
-      "date": "2026-03-25T08:00:00Z",
-      "location": "Maple Grove Park",
-      "description": "Sunrise sessions and wellness workshops.",
-      "image_url": "https://picsum.photos/seed/36/600/400",
-      "tickets_available": 100
-    },
-    {
       "id": "37",
       "name": "Urban Photography Walk",
       "date": "2025-07-18T07:00:00Z",
@@ -370,15 +334,6 @@
       "tickets_available": 100
     },
     {
-      "id": "1747294797704",
-      "name": "ArafatGz",
-      "date": "1999-10-10T10:10",
-      "location": "Yemen",
-      "description": "hello this is event",
-      "image_url": "https://www.geograf.in/images/pic/d8d96af7.jpg",
-      "tickets_available": 1000
-    },
-    {
       "id": "1747294925891",
       "name": "arafat fahd",
       "date": "1999-10-10T10:10",
@@ -386,60 +341,6 @@
       "description": "hello germany",
       "image_url": "https://jaywaytravel.com/wp-content/uploads/2024/11/berlin-skyline.jpg",
       "tickets_available": 0
-    },
-    {
-      "id": "1747295541431",
-      "name": "arafat fahed Gamzawe",
-      "date": "1999-10-10T10:10",
-      "location": "Yemen",
-      "description": "asdlk;fjas;dflj ",
-      "image_url": "",
-      "tickets_available": 100
-    },
-    {
-      "id": "1747295641126",
-      "name": "arafat fahed Gamzawe",
-      "date": "1999-10-10T10:10",
-      "location": "hi",
-      "description": "adfasdfasd",
-      "image_url": "",
-      "tickets_available": 10000
-    },
-    {
-      "id": "1747298119925",
-      "name": "arafat fahed Gamzawe",
-      "date": "1997-10-10T10:10",
-      "location": "somalia",
-      "description": "asdfasdfasfdasfsaf",
-      "image_url": "images/photo_2025-05-12_20-07-23.jpg",
-      "tickets_available": 0
-    },
-    {
-      "id": "1747464021374",
-      "name": "faisal",
-      "date": "2027-10-10T10:10",
-      "location": "al hada",
-      "description": "asdkjfl;kasjdl;",
-      "image_url": "images/07378d0145a9faa5ee0698a040e7954f (1).jpg",
-      "tickets_available": 100
-    },
-    {
-      "id": "1747465717862",
-      "name": "gamzawe",
-      "date": "1999-10-10T10:10",
-      "location": "germeny",
-      "description": "sadfasdfasdf",
-      "image_url": "",
-      "tickets_available": 100
-    },
-    {
-      "id": "1747465748159",
-      "name": "gamzawe",
-      "date": "1999-10-10T10:10",
-      "location": "germeny",
-      "description": "asdfasdfas564654asdf",
-      "image_url": "07378d0145a9faa5ee0698a040e7954f (1).jpg",
-      "tickets_available": 100
     }
   ]
 }
