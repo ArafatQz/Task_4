@@ -24,8 +24,7 @@ export default function Dashboard() {
             onClick={() => navigate('/dashboard/cards')}
             role="button"
             tabIndex={0}
-            onKeyPress={e => { if (e.key === 'Enter') navigate('/dashboard/cards'); }}
-          >
+            >
             <h2 className="text-xl font-semibold text-gray-700 mb-4">Total Events</h2>
             <div className="text-5xl font-extrabold bg-gradient-to-r from-purple-600 via-blue-500 to-indigo-600 bg-clip-text text-transparent">
               {events.length}
@@ -35,6 +34,9 @@ export default function Dashboard() {
           {/* Total Attenders Card */}
           <div
             className="block bg-white rounded-2xl shadow-lg border border-indigo-100 p-8 transform transition hover:scale-105 cursor-pointer"
+            onClick={() => navigate('/dashboard/attendees')}
+            role="button"
+            tabIndex={0}
           >
             <h2 className="text-xl font-semibold text-gray-700 mb-4">Total Attenders</h2>
             <div className="text-5xl font-extrabold bg-gradient-to-r from-purple-600 via-blue-500 to-indigo-600 bg-clip-text text-transparent">

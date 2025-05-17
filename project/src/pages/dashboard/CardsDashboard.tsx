@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import useEventStore from '@/stores/eventStore';
 import EventCard from '@/components/event-card';
 import SortDropdown from '@/components/SortDropdown';
+import CreateNewEventButton from '@/components/CreateNewEventButton';
 
 const CardsDashboard: React.FC = () => {
   const navigate = useNavigate();
@@ -31,6 +32,7 @@ const CardsDashboard: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
+      
       <div className="max-w-5xl mx-auto">
         <h1 className="text-5xl font-extrabold tracking-tight bg-gradient-to-r from-purple-600 via-blue-500 to-indigo-600 bg-clip-text text-transparent text-center mb-8">
           Dashboard
@@ -77,6 +79,7 @@ const CardsDashboard: React.FC = () => {
         <h2 className="text-2xl font-semibold text-gray-700 mb-4">Events</h2>
         <div className="flex items-center justify-between mb-6">
           <SortDropdown sortBy={sortBy} setSortBy={setSortBy} />
+          <CreateNewEventButton onClick={() => navigate('/components/CreateEvent')} />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {sortedEvents.map((event) => (
@@ -88,7 +91,7 @@ const CardsDashboard: React.FC = () => {
               location={event.location}
               totalAttendees={event.totalAttendees}
               imageUrl={event.image_url}
-              onClick={() => navigate(`/dashboard/update-event/${event.id}`)}
+              onClick={() => navigate(`/components/UpdateEvent/${event.id}`)}
             />
           ))}
         </div>
